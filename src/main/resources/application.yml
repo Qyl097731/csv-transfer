@@ -1,0 +1,18 @@
+data-package:
+  station: 'D:\pollution\station_20220101-20220716\'
+  city: 'D:\pollution\city_20220101-20220716\'
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/xml/*.xml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ml1234
+    url: jdbc:mysql://192.168.0.230:3306/qhmuli?characterEncoding=utf8&useSSL=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Hongkong&allowPublicKeyRetrieval=true
+    username: qhmuli
+    hikari:
+      connection-timeout: 600000
+      maximum-pool-size: 24

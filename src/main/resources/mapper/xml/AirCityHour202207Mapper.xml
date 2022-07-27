@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.csvtransfer.mapper.AirCityHour202207Mapper">
+
+    <sql id="Base_Column_List">
+        data_id
+        ,c_code,data_time,AQI,pri_pol,CO,CO_24,NO2,NO2_24,SO2,SO2_24,O3,O3_24,O3_8,O3_8_24,PM10,PM10_24,PM2_5,PM2_5_24
+    </sql>
+
+    <select id="selectOneByCond" resultType="com.example.csvtransfer.entity.AirCityHourEntity">
+        select *
+        from ${tableName}
+        where data_time = #{dataTime}
+          and c_code = #{code}
+    </select>
+
+    <select id="findTableByName" resultType="java.lang.Integer" parameterType="string">
+        select count(*)
+        from information_schema.TABLES
+        where table_name = #{tableName}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.example.csvtransfer.entity.AirCityHourEntity">
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="record.dataId != null">
+                data_id,
+            </if>
+            <if test="record.cCode != null">
+                c_code,
+            </if>
+            <if test="record.dataTime != null">
+                data_time,
+            </if>
+            <if test="record.aqi != null">
+                AQI,
+            </if>
+            <if test="record.priPol != null">
+                pri_pol,
+            </if>
+            <if test="record.co != null">
+                CO,
+            </if>
+            <if test="record.co24 != null">
+                CO_24,
+            </if>
+            <if test="record.no2 != null">
+                NO2,
+            </if>
+            <if test="record.no224 != null">
+                NO2_24,
+            </if>
+            <if test="record.so2 != null">
+                SO2,
+            </if>
+            <if test="record.so224 != null">
+                SO2_24,
+            </if>
+            <if test="record.o3 != null">
+                O3,
+            </if>
+            <if test="record.o324 != null">
+                O3_24,
+            </if>
+            <if test="record.o38 != null">
+                O3_8,
+            </if>
+            <if test="record.o3824 != null">
+                O3_8_24,
+            </if>
+            <if test="record.pm10 != null">
+                PM10,
+            </if>
+            <if test="record.pm1024 != null">
+                PM10_24,
+            </if>
+            <if test="record.pm25 != null">
+                PM2_5,
+            </if>
+            <if test="record.pm2524 != null">
+                PM2_5_24,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="record.dataId != null">
+                #{record.dataId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cCode != null">
+                #{record.cCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dataTime != null">
+                #{record.dataTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.aqi != null">
+                #{record.aqi,jdbcType=INTEGER},
+            </if>
+            <if test="record.priPol != null">
+                #{record.priPol,jdbcType=VARCHAR},
+            </if>
+            <if test="record.co != null">
+                #{record.co,jdbcType=DOUBLE},
+            </if>
+            <if test="record.co24 != null">
+                #{record.co24,jdbcType=DOUBLE},
+            </if>
+            <if test="record.no2 != null">
+                #{record.no2,jdbcType=INTEGER},
+            </if>
+            <if test="record.no224 != null">
+                #{record.no224,jdbcType=INTEGER},
+            </if>
+            <if test="record.so2 != null">
+                #{record.so2,jdbcType=INTEGER},
+            </if>
+            <if test="record.so224 != null">
+                #{record.so224,jdbcType=INTEGER},
+            </if>
+            <if test="record.o3 != null">
+                #{record.o3,jdbcType=INTEGER},
+            </if>
+            <if test="record.o324 != null">
+                #{record.o324,jdbcType=INTEGER},
+            </if>
+            <if test="record.o38 != null">
+                #{record.o38,jdbcType=INTEGER},
+            </if>
+            <if test="record.o3824 != null">
+                #{record.o3824,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm10 != null">
+                #{record.pm10,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm1024 != null">
+                #{record.pm1024,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm25 != null">
+                #{record.pm25,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm2524 != null">
+                #{record.pm2524,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="saveBatch">
+        insert into ${tableName}
+        (<include refid="Base_Column_List"/>)
+        values
+        <foreach collection="records" item="record" separator=",">
+            (#{record.dataId,jdbcType=VARCHAR},
+            #{record.cCode,jdbcType=VARCHAR},
+            #{record.dataTime,jdbcType=TIMESTAMP},
+            #{record.aqi,jdbcType=INTEGER},
+            #{record.priPol,jdbcType=VARCHAR},
+            #{record.co,jdbcType=DOUBLE},
+            #{record.co24,jdbcType=DOUBLE},
+            #{record.no2,jdbcType=INTEGER},
+            #{record.no224,jdbcType=INTEGER},
+            #{record.so2,jdbcType=INTEGER},
+            #{record.so224,jdbcType=INTEGER},
+            #{record.o3,jdbcType=INTEGER},
+            #{record.o324,jdbcType=INTEGER},
+            #{record.o38,jdbcType=INTEGER},
+            #{record.o3824,jdbcType=INTEGER},
+            #{record.pm10,jdbcType=INTEGER},
+            #{record.pm1024,jdbcType=INTEGER},
+            #{record.pm25,jdbcType=INTEGER},
+            #{record.pm2524,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <update id="saveOrUpdateBatch">
+        insert into ${tableName}
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values
+        <foreach collection="records" item="record" separator=",">
+            (
+            #{record.dataId,jdbcType=VARCHAR},
+            #{record.cCode,jdbcType=VARCHAR},
+            #{record.dataTime,jdbcType=TIMESTAMP},
+            #{record.aqi,jdbcType=INTEGER},
+            #{record.priPol,jdbcType=VARCHAR},
+            #{record.co,jdbcType=DOUBLE},
+            #{record.co24,jdbcType=DOUBLE},
+            #{record.no2,jdbcType=INTEGER},
+            #{record.no224,jdbcType=INTEGER},
+            #{record.so2,jdbcType=INTEGER},
+            #{record.so224,jdbcType=INTEGER},
+            #{record.o3,jdbcType=INTEGER},
+            #{record.o324,jdbcType=INTEGER},
+            #{record.o38,jdbcType=INTEGER},
+            #{record.o3824,jdbcType=INTEGER},
+            #{record.pm10,jdbcType=INTEGER},
+            #{record.pm1024,jdbcType=INTEGER},
+            #{record.pm25,jdbcType=INTEGER},
+            #{record.pm2524,jdbcType=INTEGER}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        AQI = VALUES(AQI),
+        CO = VALUES(CO),CO_24 = VALUES(CO_24),
+        NO2 = VALUES(NO2),NO2_24 = VALUES(NO2_24),
+        SO2 = VALUES(SO2),SO2_24 = VALUES(SO2_24),
+        O3 = VALUES(O3),O3_8 = VALUES(O3_8),O3_8_24 = VALUES(O3_8_24),
+        PM10 = VALUES(PM10),PM10_24 = VALUES(PM10_24),
+        PM2_5 = VALUES(PM2_5),PM2_5_24 =VALUES(PM2_5_24)
+    </update>
+
+    <update id="createNewTable" parameterType="string">
+        CREATE TABLE ${tableName}
+        (
+            `data_id`   varchar(32) NOT NULL,
+            `c_code`    varchar(10) NOT NULL,
+            `data_time` datetime    NOT NULL,
+            `AQI`       int(4) DEFAULT NULL,
+            `pri_pol`   varchar(100) DEFAULT NULL,
+            `CO`        double(6, 3
+        ) DEFAULT NULL,
+  `CO_24` double(6,3) DEFAULT NULL,
+  `NO2` int(4) DEFAULT NULL,
+  `NO2_24` int(4) DEFAULT NULL,
+  `SO2` int(4) DEFAULT NULL,
+  `SO2_24` int(4) DEFAULT NULL,
+  `O3` int(4) DEFAULT NULL,
+  `O3_24` int(4) DEFAULT NULL,
+  `O3_8` int(4) DEFAULT NULL,
+  `O3_8_24` int(4) DEFAULT NULL,
+  `PM10` int(4) DEFAULT NULL,
+  `PM10_24` int(4) DEFAULT NULL,
+  `PM2_5` int(4) DEFAULT NULL,
+  `PM2_5_24` int(4) DEFAULT NULL,
+  PRIMARY KEY (`data_id`),
+  UNIQUE KEY `${tableName}` (`c_code`,`data_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    </update>
+
+    <update id="updateBySelective" parameterType="com.example.csvtransfer.entity.AirStationHourEntity">
+        update ${tableName}
+        <set>
+            <if test="record.cCode != null">
+                c_code = #{record.cCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dataTime != null">
+                data_time = #{record.dataTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.aqi != null">
+                AQI = #{record.aqi,jdbcType=INTEGER},
+            </if>
+            <if test="record.priPol != null">
+                pri_pol = #{record.priPol,jdbcType=VARCHAR},
+            </if>
+            <if test="record.co != null">
+                CO = #{record.co,jdbcType=DOUBLE},
+            </if>
+            <if test="record.co24 != null">
+                CO_24 = #{record.co24,jdbcType=DOUBLE},
+            </if>
+            <if test="record.no2 != null">
+                NO2 = #{record.no2,jdbcType=INTEGER},
+            </if>
+            <if test="record.no224 != null">
+                NO2_24 = #{record.no224,jdbcType=INTEGER},
+            </if>
+            <if test="record.so2 != null">
+                SO2 = #{record.so2,jdbcType=INTEGER},
+            </if>
+            <if test="record.so224 != null">
+                SO2_24 = #{record.so224,jdbcType=INTEGER},
+            </if>
+            <if test="record.o3 != null">
+                O3 = #{record.o3,jdbcType=INTEGER},
+            </if>
+            <if test="record.o324 != null">
+                O3_24 = #{record.o324,jdbcType=INTEGER},
+            </if>
+            <if test="record.o38 != null">
+                O3_8 = #{record.o38,jdbcType=INTEGER},
+            </if>
+            <if test="record.o3824 != null">
+                O3_8_24 = #{record.o3824,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm10 != null">
+                PM10 = #{record.pm10,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm1024 != null">
+                PM10_24 = #{record.pm1024,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm25 != null">
+                PM2_5 = #{record.pm25,jdbcType=INTEGER},
+            </if>
+            <if test="record.pm2524 != null">
+                PM2_5_24 = #{record.pm2524,jdbcType=INTEGER},
+            </if>
+        </set>
+        where data_id = #{record.dataId,jdbcType=VARCHAR}
+
+    </update>
+
+</mapper>
