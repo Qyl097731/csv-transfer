@@ -10,16 +10,12 @@ import java.util.Date;
 /**
  * @author qyl
  * @program DateUtil.java
- * @Description TODO
+ * @Description 获取日期
  * @createTime 2022-07-25 13:29
  */
 public class DateUtil {
     public static DateTimeFormatter FORMAT_YMDH = DateTimeFormatter.ofPattern("yyyyMMddHH");
     public static DateTimeFormatter FORMAT_YMD_F = DateTimeFormatter.ofPattern("yyyyMMdd");
-
-    public static LocalDateTime parseYMDHMSF(String dateTimeStr) {
-        return LocalDateTime.parse(dateTimeStr, FORMAT_YMDH);
-    }
 
     public static LocalDateTime parseYMD(String dateTimeStr) {
         return LocalDate.parse(dateTimeStr, FORMAT_YMD_F).atStartOfDay();

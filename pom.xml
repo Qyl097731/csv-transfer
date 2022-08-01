@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>csvTransfer1</artifactId>
+    <artifactId>csvTransfer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>csvTransfer1</name>
     <description>Demo project for Spring Boot</description>
@@ -25,6 +25,12 @@
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
         </dependency>
 
         <dependency>

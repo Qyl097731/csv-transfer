@@ -1,33 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.csvtransfer.mapper.AirCityHour202207Mapper">
+<mapper namespace="com.example.csvtransfer.mapper.AirStationHourMapper">
 
     <sql id="Base_Column_List">
         data_id
-        ,c_code,data_time,AQI,pri_pol,CO,CO_24,NO2,NO2_24,SO2,SO2_24,O3,O3_24,O3_8,O3_8_24,PM10,PM10_24,PM2_5,PM2_5_24
+        ,station_id,data_time,AQI,pri_pol,CO,CO_24,NO2,NO2_24,SO2,SO2_24,O3,O3_24,O3_8,O3_8_24,PM10,PM10_24,PM2_5,PM2_5_24
     </sql>
 
-    <select id="selectOneByCond" resultType="com.example.csvtransfer.entity.AirCityHourEntity">
-        select *
-        from ${tableName}
-        where data_time = #{dataTime}
-          and c_code = #{code}
-    </select>
-
-    <select id="findTableByName" resultType="java.lang.Integer" parameterType="string">
-        select count(*)
-        from information_schema.TABLES
-        where table_name = #{tableName}
-    </select>
-
-    <insert id="insertSelective" parameterType="com.example.csvtransfer.entity.AirCityHourEntity">
+    <insert id="insertSelective" parameterType="com.example.csvtransfer.entity.AirStationHourEntity">
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="record.dataId != null">
                 data_id,
             </if>
-            <if test="record.cCode != null">
-                c_code,
+            <if test="record.stationId != null">
+                station_id,
             </if>
             <if test="record.dataTime != null">
                 data_time,
@@ -85,8 +72,8 @@
             <if test="record.dataId != null">
                 #{record.dataId,jdbcType=VARCHAR},
             </if>
-            <if test="record.cCode != null">
-                #{record.cCode,jdbcType=VARCHAR},
+            <if test="record.stationId != null">
+                #{record.stationId,jdbcType=VARCHAR},
             </if>
             <if test="record.dataTime != null">
                 #{record.dataTime,jdbcType=TIMESTAMP},
@@ -142,106 +129,12 @@
         </trim>
     </insert>
 
-    <insert id="saveBatch">
-        insert into ${tableName}
-        (<include refid="Base_Column_List"/>)
-        values
-        <foreach collection="records" item="record" separator=",">
-            (#{record.dataId,jdbcType=VARCHAR},
-            #{record.cCode,jdbcType=VARCHAR},
-            #{record.dataTime,jdbcType=TIMESTAMP},
-            #{record.aqi,jdbcType=INTEGER},
-            #{record.priPol,jdbcType=VARCHAR},
-            #{record.co,jdbcType=DOUBLE},
-            #{record.co24,jdbcType=DOUBLE},
-            #{record.no2,jdbcType=INTEGER},
-            #{record.no224,jdbcType=INTEGER},
-            #{record.so2,jdbcType=INTEGER},
-            #{record.so224,jdbcType=INTEGER},
-            #{record.o3,jdbcType=INTEGER},
-            #{record.o324,jdbcType=INTEGER},
-            #{record.o38,jdbcType=INTEGER},
-            #{record.o3824,jdbcType=INTEGER},
-            #{record.pm10,jdbcType=INTEGER},
-            #{record.pm1024,jdbcType=INTEGER},
-            #{record.pm25,jdbcType=INTEGER},
-            #{record.pm2524,jdbcType=INTEGER}
-            )
-        </foreach>
-    </insert>
-
-    <update id="saveOrUpdateBatch">
-        insert into ${tableName}
-        (
-        <include refid="Base_Column_List"/>
-        )
-        values
-        <foreach collection="records" item="record" separator=",">
-            (
-            #{record.dataId,jdbcType=VARCHAR},
-            #{record.cCode,jdbcType=VARCHAR},
-            #{record.dataTime,jdbcType=TIMESTAMP},
-            #{record.aqi,jdbcType=INTEGER},
-            #{record.priPol,jdbcType=VARCHAR},
-            #{record.co,jdbcType=DOUBLE},
-            #{record.co24,jdbcType=DOUBLE},
-            #{record.no2,jdbcType=INTEGER},
-            #{record.no224,jdbcType=INTEGER},
-            #{record.so2,jdbcType=INTEGER},
-            #{record.so224,jdbcType=INTEGER},
-            #{record.o3,jdbcType=INTEGER},
-            #{record.o324,jdbcType=INTEGER},
-            #{record.o38,jdbcType=INTEGER},
-            #{record.o3824,jdbcType=INTEGER},
-            #{record.pm10,jdbcType=INTEGER},
-            #{record.pm1024,jdbcType=INTEGER},
-            #{record.pm25,jdbcType=INTEGER},
-            #{record.pm2524,jdbcType=INTEGER}
-            )
-        </foreach>
-        ON DUPLICATE KEY UPDATE
-        AQI = VALUES(AQI),
-        CO = VALUES(CO),CO_24 = VALUES(CO_24),
-        NO2 = VALUES(NO2),NO2_24 = VALUES(NO2_24),
-        SO2 = VALUES(SO2),SO2_24 = VALUES(SO2_24),
-        O3 = VALUES(O3),O3_8 = VALUES(O3_8),O3_8_24 = VALUES(O3_8_24),
-        PM10 = VALUES(PM10),PM10_24 = VALUES(PM10_24),
-        PM2_5 = VALUES(PM2_5),PM2_5_24 =VALUES(PM2_5_24)
-    </update>
-
-    <update id="createNewTable" parameterType="string">
-        CREATE TABLE ${tableName}
-        (
-            `data_id`   varchar(32) NOT NULL,
-            `c_code`    varchar(10) NOT NULL,
-            `data_time` datetime    NOT NULL,
-            `AQI`       int(4) DEFAULT NULL,
-            `pri_pol`   varchar(100) DEFAULT NULL,
-            `CO`        double(6, 3
-        ) DEFAULT NULL,
-  `CO_24` double(6,3) DEFAULT NULL,
-  `NO2` int(4) DEFAULT NULL,
-  `NO2_24` int(4) DEFAULT NULL,
-  `SO2` int(4) DEFAULT NULL,
-  `SO2_24` int(4) DEFAULT NULL,
-  `O3` int(4) DEFAULT NULL,
-  `O3_24` int(4) DEFAULT NULL,
-  `O3_8` int(4) DEFAULT NULL,
-  `O3_8_24` int(4) DEFAULT NULL,
-  `PM10` int(4) DEFAULT NULL,
-  `PM10_24` int(4) DEFAULT NULL,
-  `PM2_5` int(4) DEFAULT NULL,
-  `PM2_5_24` int(4) DEFAULT NULL,
-  PRIMARY KEY (`data_id`),
-  UNIQUE KEY `${tableName}` (`c_code`,`data_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    </update>
 
     <update id="updateBySelective" parameterType="com.example.csvtransfer.entity.AirStationHourEntity">
         update ${tableName}
         <set>
-            <if test="record.cCode != null">
-                c_code = #{record.cCode,jdbcType=VARCHAR},
+            <if test="record.stationId != null">
+                station_id = #{record.stationId,jdbcType=VARCHAR},
             </if>
             <if test="record.dataTime != null">
                 data_time = #{record.dataTime,jdbcType=TIMESTAMP},
@@ -298,5 +191,84 @@
         where data_id = #{record.dataId,jdbcType=VARCHAR}
 
     </update>
+
+    <update id="createNewTable" parameterType="string">
+        CREATE TABLE ${tableName}
+        (
+            `data_id`    varchar(32) NOT NULL,
+            `station_id` varchar(10) NOT NULL,
+            `data_time`  datetime    NOT NULL,
+            `AQI`        int(4) DEFAULT NULL,
+            `pri_pol`    varchar(100) DEFAULT NULL,
+            `CO`         double(6, 3
+        ) DEFAULT NULL,
+  `CO_24` double(6,3) DEFAULT NULL,
+  `NO2` int(4) DEFAULT NULL,
+  `NO2_24` int(4) DEFAULT NULL,
+  `SO2` int(4) DEFAULT NULL,
+  `SO2_24` int(4) DEFAULT NULL,
+  `O3` int(4) DEFAULT NULL,
+  `O3_24` int(4) DEFAULT NULL,
+  `O3_8` int(4) DEFAULT NULL,
+  `O3_8_24` int(4) DEFAULT NULL,
+  `PM10` int(4) DEFAULT NULL,
+  `PM10_24` int(4) DEFAULT NULL,
+  `PM2_5` int(4) DEFAULT NULL,
+  `PM2_5_24` int(4) DEFAULT NULL,
+  UNIQUE KEY `${tableName}` (`station_id`,`data_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    </update>
+
+    <update id="saveOrUpdateBatch">
+        insert into ${tableName}
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values
+        <foreach collection="records" item="record" separator=",">
+            (
+            #{record.dataId,jdbcType=VARCHAR},
+            #{record.stationId,jdbcType=VARCHAR},
+            #{record.dataTime,jdbcType=TIMESTAMP},
+            #{record.aqi,jdbcType=INTEGER},
+            #{record.priPol,jdbcType=VARCHAR},
+            #{record.co,jdbcType=DOUBLE},
+            #{record.co24,jdbcType=DOUBLE},
+            #{record.no2,jdbcType=INTEGER},
+            #{record.no224,jdbcType=INTEGER},
+            #{record.so2,jdbcType=INTEGER},
+            #{record.so224,jdbcType=INTEGER},
+            #{record.o3,jdbcType=INTEGER},
+            #{record.o324,jdbcType=INTEGER},
+            #{record.o38,jdbcType=INTEGER},
+            #{record.o3824,jdbcType=INTEGER},
+            #{record.pm10,jdbcType=INTEGER},
+            #{record.pm1024,jdbcType=INTEGER},
+            #{record.pm25,jdbcType=INTEGER},
+            #{record.pm2524,jdbcType=INTEGER}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        AQI = VALUES(AQI),
+        CO = VALUES(CO),CO_24 = VALUES(CO_24),
+        NO2 = VALUES(NO2),NO2_24 = VALUES(NO2_24),
+        SO2 = VALUES(SO2),SO2_24 = VALUES(SO2_24),
+        O3 = VALUES(O3),O3_8 = VALUES(O3_8),O3_8_24 = VALUES(O3_8_24),
+        PM10 = VALUES(PM10),PM10_24 = VALUES(PM10_24),
+        PM2_5 = VALUES(PM2_5),PM2_5_24 =VALUES(PM2_5_24)
+    </update>
+
+    <select id="findTableByName" parameterType="string" resultType="int">
+        select count(*)
+        from information_schema.TABLES
+        where table_name = #{tableName}
+    </select>
+
+    <select id="selectOneByCond" resultType="com.example.csvtransfer.entity.AirStationHourEntity">
+        select *
+        from ${tableName}
+        where data_time = #{dataTime}
+          and station_id = #{stationId}
+    </select>
 
 </mapper>

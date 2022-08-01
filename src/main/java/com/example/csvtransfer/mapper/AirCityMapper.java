@@ -17,7 +17,11 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface AirCityMapper extends BaseMapper<AirCity> {
-
+    /**
+     * 模糊查询城市code
+     * @param cityName
+     * @return AirCity
+     */
     @Select("select code, name from t_yhdr_bc_air_city where name like concat(#{cityName,jdbcType=VARCHAR},'_')")
     AirCity selectByName(String cityName);
 }
